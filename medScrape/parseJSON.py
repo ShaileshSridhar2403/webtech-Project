@@ -41,9 +41,9 @@ for l in sampleDict:
 ratingList = []
 for i in sampleDict:
 	d={}
-	d['UserID'] = l[0]
-	d['communityID'] = l[1]
-	d['rating'] = l[2]
+	d['UserID'] = i[0]
+	d['communityID'] = i[1]
+	d['rating'] = i[2]
 	ratingList.append(d)
 
 

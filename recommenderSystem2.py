@@ -42,8 +42,8 @@ THIS INCLUDES ALREADY VISITED SITES
 #	l.append(math.floor((random.random()*3) + 1))
 #############
 
-#######Data conversion and training       #property_id,user,action
-#df = pd.DataFrame(sampleDict,columns = ['UID','propertyId','rating'])
+#######Data conversion and training       #Community_id,user,action
+#df = pd.DataFrame(sampleDict,columns = ['UID','CommunityId','rating'])
 #reader = Reader(rating_scale = (1,3))
 #data = Dataset.load_from_df(df, reader)
 #
@@ -58,19 +58,20 @@ THIS INCLUDES ALREADY VISITED SITES
 def extractPropListFromResult(result):
 #	l = result['result']
 	for d in result:
-		l.append(d['property_id'])
+		l.append(d['Community_id'])
 	return l
 
 def makeDfFromData(dictList):   #Current model is to convert entire data into df from scratch, might need to change
-	l = [d['user','property_id','rating'] for d in dictList]
-	df = pd.DataFrame(l,columns = ['UID','propertyId','rating'])
+	l = [d['UserID','communityID','rating'] for d in dictList]
+	df = pd.DataFrame(l,columns = ['UserID','communityID','rating'])
 	reader = Reader(rating_scale = (1,3))
 	data = Dataset.load_from_df(df, reader)	
 	return data
 
 
-def outputTopK(model,userID,propertyIDs,K):					#Given a list of property IDs, output same list sorted according to user preference
-		l = [(propertyID,model.predict(str(userID),str(propertyID))) for propertyID in propertyIDs]
+def outputTopK(model,userID,communityIDs,K):					#Given a list of Community IDs, output same list sorted according to user preference
+		####Extract 
+		l = [(CommunityID,model.predict(str(userID),str(CommunityID))) for CommunityID in communityIDs]
 		l.sort(key = lambda x: x[-1	],reverse = True)
 		return l[:K]
 	

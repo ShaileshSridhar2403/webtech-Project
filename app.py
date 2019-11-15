@@ -11,10 +11,10 @@ mongo = PyMongo(app)
 @app.route("/user_actions", methods=['POST'])
 def user_actions():
     user_actions = mongo.db.user_actions
-    user = request.json['user']
-    property_id = request.json['property_id']
+    user = request.json['UserID']
+    property_id = request.json['communityID']
     action = request.json['action']
-    user_actions_id = user_actions.insert({'user': user, 'property_id': property_id, 'action': action})
+    user_actions_id = user_actions.insert({'UserID': user, 'propertyId': property_id, 'rating': action})
     new_user_action = user_actions.find_one({'_id': user_actions_id })
     return "Whatever"
 
@@ -23,7 +23,7 @@ def user_recommendations(user):
     user_actions = mongo.db.user_actions
     output = []
     for s in user_actions.find():
-        output.append({'user' : s['user'], 'property_id' : s['property_id'], 'action': s['action']})
+        output.append({'UserID' : s['UserID'], 'propertyID' : s['propertyID'], 'action': s['action']})
     df = rs.makeDfFromData(output)
     model = rs.trainModel(df)
     output = rs.outputTopK(model,user,output,len(output))
