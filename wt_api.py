@@ -66,6 +66,22 @@ def getUser():
 	else: return jsonify({}),405
 
 
+@app.route('/getCommunity',methods=['GET','OPTIONS'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def getCommunity():
+	if request.method == 'GET':
+		client = pymongo.MongoClient("mongodb+srv://rohansharma1606:_kwB&9Q4GTZg2fA@se-6kdpi.mongodb.net/test?retryWrites=true&w=majority")
+		db=client.hack_wt
+		posts=db.community
+		li=[]
+		x=posts.find({})
+		for i in x:
+			li.append(i['communityID'])
+		return jsonify({'data':li})
+
+
+
+
 '''@app.route('/addCommunity',methods=['GET','OPTIONS'])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def addCommunity():
