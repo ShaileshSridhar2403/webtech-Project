@@ -3,10 +3,21 @@ from flask import  request, jsonify
 from flask_pymongo import  PyMongo
 import recommenderSystem2 as rs
 import json
+import wt_api as dbapi
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/test"
+#app.config["MONGO_URI"] = "mongodb://localhost:27017/test"
 mongo = PyMongo(app)
+
+def getCommunity():
+        client = PyMongo.MongoClient("mongodb+srv://rohansharma1606:_kwB&9Q4GTZg2fA@se-6kdpi.mongodb.net/test?retryWrites=true&w=majority")
+        db=client.hack_wt
+        posts=db.community
+        li=[]
+        x=posts.find({})
+        for i in x:
+            li.append(i['communityID'])
+        return jsonify({'data':li})
 
 @app.route("/user_actions", methods=['POST'])
 def user_actions():
@@ -20,8 +31,10 @@ def user_actions():
 
 @app.route("/user_recommendations/<user>", methods=['GET'])
 def user_recommendations(user):
-    user_actions = mongo.db.user_actions
-    communityIDs = function####Shivam
+    client = PyMongo.MongoClient("mongodb+srv://rohansharma1606:_kwB&9Q4GTZg2fA@se-6kdpi.mongodb.net/test?retryWrites=true&w=majority")
+    db = client.hack_wt
+    user_actions = db.ratings
+    communityIDs = getCommunity()
     output = []
     for s in user_actions.find():
         output.append({'UserID' : s['UserID'], 'communityID' : s['communityID'], 'rating': s['rating']})
