@@ -21,12 +21,13 @@ def user_actions():
 @app.route("/user_recommendations/<user>", methods=['GET'])
 def user_recommendations(user):
     user_actions = mongo.db.user_actions
+    communityIDs = function####Shivam
     output = []
     for s in user_actions.find():
-        output.append({'UserID' : s['UserID'], 'propertyID' : s['propertyID'], 'action': s['action']})
+        output.append({'UserID' : s['UserID'], 'communityID' : s['communityID'], 'rating': s['rating']})
     df = rs.makeDfFromData(output)
     model = rs.trainModel(df)
-    output = rs.outputTopK(model,user,output,len(output))
+    output = rs.outputTopK(model,user,communityIDs,3)
     return jsonify({'result' : output})
 
 #@app.route("/user_recommendations/propList/<users>", methods=['POST'])
